@@ -8,7 +8,7 @@ public class ChunkEncoder
 		byte[] readBuff = new byte[1500];
 		while (true)
 		{
-			int readCount = await sourceStream.ReadAsync(readBuff, 0, readBuff.Length);
+			int readCount = await sourceStream.ReadAsync(readBuff);
 			if (readCount == 0) break;
 			await WriteContentAsync(readBuff, 0, readCount, dstStream);
 		}
