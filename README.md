@@ -26,3 +26,8 @@ app.MapGet("/ts.mp4", async (HttpContext context) =>
 });
 ```
 
+## 为什么本库中没有提供 Chunk 的解码器？
+
+因为不需要。C# 的 HttpClient 支持接收 Chunk 编码的数据，自动解码，对用户来说是无感的。浏览器也都支持 chunk 编码，在获取 chunk 编码的文件时能够自动进行解码。
+
+ASP.NET Core 中我没有找到对数据进行 chunk 编码的官方库，所以自己写了一个。
