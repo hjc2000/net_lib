@@ -34,6 +34,6 @@ public class ChunkEncoder
 	/// <summary>
 	/// 0\r\n\r\n
 	/// </summary>
-	public static byte[] Trailer { get; } = new byte[5] { 0, 13, 10, 13, 10 };
+	public static byte[] Trailer { get; } = new byte[5] { 48, 13, 10, 13, 10 };
 
 }

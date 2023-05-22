@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/hjc2000/net_lib</RepositoryUrl>
     <IncludeSymbols>False</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
 </Project>
