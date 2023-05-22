@@ -8,23 +8,34 @@ namespace NetLib.NetworkInterfaceLib;
 /// </summary>
 public class NetInterfaceInfoCollection : IEnumerable
 {
+	#region 生命周期
+	/// <summary>
+	/// 构造函数，获取系统中的所有网卡的信息，然后储存到本类中
+	/// </summary>
 	public NetInterfaceInfoCollection()
 	{
+		// 获取系统中的所有网卡信息
 		NetworkInterface[] netInterfaceArr = NetworkInterface.GetAllNetworkInterfaces();
-		_infoArr = new NetInterfaceInfo[netInterfaceArr.Length];
+		// 创建 NetInterfaceInfo 类的数组用来储存网卡信息
+		_networkInterfaceInfoArr = new NetInterfaceInfo[netInterfaceArr.Length];
+		// 遍历每一个网卡，将其部分信息复制到 NetInterfaceInfo 对象中，
+		// 一般不用用到全部信息
+		// 然后将 NetInterfaceInfo 对象放到数组中
 		for (int i = 0; i < netInterfaceArr.Length; i++)
 		{
 			string description = netInterfaceArr[i].Description;
 			string[] uips = GetUnicastIPAddressInformationArr(netInterfaceArr[i]);
 			string[] mips = GetMulticastIPAddressInformationArr(netInterfaceArr[i]);
-			_infoArr[i] = new NetInterfaceInfo(description, uips, mips);
+			_networkInterfaceInfoArr[i] = new NetInterfaceInfo(description, uips, mips);
 		}
 	}
+	#endregion
 
+	#region 私有数据处理方法
 	/// <summary>
-	/// 获取非广播地址
+	/// 获取一个数组，里面储存着指定网卡的所有非广播 IP 地址
 	/// </summary>
-	/// <param name="networkInterface"></param>
+	/// <param name="networkInterface">指定的网卡</param>
 	/// <returns></returns>
 	private string[] GetUnicastIPAddressInformationArr(NetworkInterface networkInterface)
 	{
@@ -41,9 +52,9 @@ public class NetInterfaceInfoCollection : IEnumerable
 	}
 
 	/// <summary>
-	/// 获取广播地址
+	/// 获取一个数组，里面储存着指定网卡的所有广播 IP 地址
 	/// </summary>
-	/// <param name="networkInterface"></param>
+	/// <param name="networkInterface">指定的网卡</param>
 	/// <returns></returns>
 	private string[] GetMulticastIPAddressInformationArr(NetworkInterface networkInterface)
 	{
@@ -57,22 +68,35 @@ public class NetInterfaceInfoCollection : IEnumerable
 
 		return result;
 	}
+	#endregion
 
+	/// <summary>
+	/// 提供迭代器
+	/// </summary>
+	/// <returns></returns>
 	public IEnumerator GetEnumerator()
 	{
-		return _infoArr.GetEnumerator();
+		return _networkInterfaceInfoArr.GetEnumerator();
 	}
 
 	/// <summary>
 	/// 储存每个网卡信息的数组
 	/// </summary>
-	private readonly NetInterfaceInfo[] _infoArr;
+	private readonly NetInterfaceInfo[] _networkInterfaceInfoArr;
 
+	/// <summary>
+	/// 索引器，获取指定索引的网卡信息
+	/// </summary>
+	/// <param name="index">索引</param>
+	/// <returns>储存着网卡信息的 NetInterfaceInfo 对象</returns>
 	public NetInterfaceInfo this[int index]
 	{
-		get => _infoArr[index];
-		set => _infoArr[index] = value;
+		get => _networkInterfaceInfoArr[index];
+		set => _networkInterfaceInfoArr[index] = value;
 	}
 
-	public int Count => _infoArr.Length;
+	/// <summary>
+	/// 网卡的数量
+	/// </summary>
+	public int Count => _networkInterfaceInfoArr.Length;
 }
