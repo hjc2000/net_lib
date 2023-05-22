@@ -30,6 +30,10 @@ public class ChunkEncoder
 	public static byte CR { get; } = 13;
 	public static byte LF { get; } = 10;
 	public static byte[] CRLF { get; } = new byte[2] { 13, 10 };
-	public static byte[] Trailer => Encoding.ASCII.GetBytes("0\r\n\r\n");
+
+	/// <summary>
+	/// 0\r\n\r\n
+	/// </summary>
+	public static byte[] Trailer { get; } = new byte[5] { 0, 13, 10, 13, 10 };
 
 }
