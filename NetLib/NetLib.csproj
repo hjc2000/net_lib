@@ -5,11 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://gitcode.net/qq_36148047/netlib.git</PackageProjectUrl>
-    <RepositoryUrl>https://gitcode.net/qq_36148047/netlib.git</RepositoryUrl>
-    <IncludeSymbols>True</IncludeSymbols>
+    <PackageProjectUrl>https://github.com/hjc2000/net_lib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hjc2000/net_lib</RepositoryUrl>
+    <IncludeSymbols>False</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>
