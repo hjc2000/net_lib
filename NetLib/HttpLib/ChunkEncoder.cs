@@ -9,7 +9,11 @@ public class ChunkEncoder
 		while (true)
 		{
 			int readCount = await sourceStream.ReadAsync(readBuff);
-			if (readCount == 0) break;
+			if (readCount == 0)
+			{
+				break;
+			}
+
 			await WriteContentAsync(readBuff, 0, readCount, dstStream);
 		}
 	}
