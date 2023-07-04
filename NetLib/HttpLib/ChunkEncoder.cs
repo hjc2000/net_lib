@@ -1,9 +1,15 @@
 ﻿using System.Text;
 
 namespace NetLib.HttpLib;
-public class ChunkEncoder
+public static class ChunkEncoder
 {
-	public static async Task WriteContentAsync(Stream sourceStream, Stream dstStream)
+	/// <summary>
+	/// 以分块的方式向目标流写入数据
+	/// </summary>
+	/// <param name="sourceStream"></param>
+	/// <param name="dstStream"></param>
+	/// <returns></returns>
+	public static async Task ChunkWriteContentToAsync(this Stream sourceStream, Stream dstStream)
 	{
 		byte[] readBuff = new byte[1500];
 		while (true)
@@ -14,11 +20,19 @@ public class ChunkEncoder
 				break;
 			}
 
-			await WriteContentAsync(readBuff, 0, readCount, dstStream);
+			await ChunkWriteContentToAsync(readBuff, 0, readCount, dstStream);
 		}
 	}
 
-	public static async Task WriteContentAsync(byte[] buff, int offset, int count, Stream dstStream)
+	/// <summary>
+	/// 以分块的方式向目标流写入数据
+	/// </summary>
+	/// <param name="buff"></param>
+	/// <param name="offset"></param>
+	/// <param name="count"></param>
+	/// <param name="dstStream"></param>
+	/// <returns></returns>
+	public static async Task ChunkWriteContentToAsync(this byte[] buff, int offset, int count, Stream dstStream)
 	{
 		string length = $"{count:x}\r\n";
 		await dstStream.WriteAsync(Encoding.UTF8.GetBytes(length));
@@ -26,7 +40,7 @@ public class ChunkEncoder
 		await dstStream.WriteAsync(CRLF);
 	}
 
-	public static async Task WriteTrailerAsync(Stream dstStream)
+	public static async Task ChunkWriteTrailerAsync(this Stream dstStream)
 	{
 		await dstStream.WriteAsync(Trailer);
 	}
