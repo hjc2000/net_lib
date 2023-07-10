@@ -38,11 +38,13 @@ public static class ChunkEncoder
 		await dstStream.WriteAsync(Encoding.UTF8.GetBytes(length));
 		await dstStream.WriteAsync(buff, offset, count);
 		await dstStream.WriteAsync(CRLF);
+		await dstStream.FlushAsync();
 	}
 
 	public static async Task ChunkWriteTrailerAsync(this Stream dstStream)
 	{
 		await dstStream.WriteAsync(Trailer);
+		await dstStream.FlushAsync();
 	}
 
 	public static byte CR { get; } = 13;
