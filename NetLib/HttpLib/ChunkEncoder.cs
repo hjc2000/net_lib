@@ -40,6 +40,7 @@ public static class ChunkEncoder
 		await dstStream.WriteAsync(Encoding.ASCII.GetBytes(length));
 		await dstStream.WriteAsync(buff, offset, count);
 		await dstStream.WriteAsync(CRLF);
+		await Task.Delay(100);
 	}
 
 	public static async Task ChunkWriteTrailerAsync(this Stream dstStream)
