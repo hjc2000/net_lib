@@ -19,8 +19,10 @@ public static class ChunkEncoder
 			{
 				break;
 			}
-
-			await ChunkWriteContentToAsync(readBuff, 0, readCount, dstStream);
+			else
+			{
+				await ChunkWriteContentToAsync(readBuff, 0, readCount, dstStream);
+			}
 		}
 	}
 
@@ -35,16 +37,14 @@ public static class ChunkEncoder
 	public static async Task ChunkWriteContentToAsync(this byte[] buff, int offset, int count, Stream dstStream)
 	{
 		string length = $"{count:x}\r\n";
-		await dstStream.WriteAsync(Encoding.UTF8.GetBytes(length));
+		await dstStream.WriteAsync(Encoding.ASCII.GetBytes(length));
 		await dstStream.WriteAsync(buff, offset, count);
 		await dstStream.WriteAsync(CRLF);
-		await dstStream.FlushAsync();
 	}
 
 	public static async Task ChunkWriteTrailerAsync(this Stream dstStream)
 	{
 		await dstStream.WriteAsync(Trailer);
-		await dstStream.FlushAsync();
 	}
 
 	public static byte CR { get; } = 13;
