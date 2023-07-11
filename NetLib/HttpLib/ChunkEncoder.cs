@@ -1,55 +1,49 @@
 ﻿using System.Text;
 
 namespace NetLib.HttpLib;
-public static class ChunkEncoder
+public class ChunkEncoder
 {
-	/// <summary>
-	/// 以分块的方式向目标流写入数据
-	/// </summary>
-	/// <param name="sourceStream"></param>
-	/// <param name="dstStream"></param>
-	/// <returns></returns>
-	public static async Task ChunkWriteContentToAsync(this Stream sourceStream, Stream dstStream)
+	public ChunkEncoder(Stream srcStream, Stream dstStream, int bufferSize = 1500)
 	{
-		byte[] readBuff = new byte[1500];
+		_srcStream = srcStream;
+		_dstStream = dstStream;
+		_readBuffer = new byte[bufferSize];
+	}
+
+	private Stream _srcStream;
+	private Stream _dstStream;
+	private byte[] _readBuffer;
+
+	public async Task WriteToDstStreamAsync()
+	{
 		int count = 0;
 		while (true)
 		{
-			int readCount = await sourceStream.ReadAsync(readBuff);
+			int readCount = await _srcStream.ReadAsync(_readBuffer);
 			if (readCount == 0)
 			{
 				break;
 			}
 			else
 			{
-				await ChunkWriteContentToAsync(readBuff, 0, readCount, dstStream);
+				await ChunkWriteContentToAsync(0, readCount);
 			}
 
 			Console.WriteLine($"第{count++}次分块");
 		}
 	}
 
-	/// <summary>
-	/// 以分块的方式向目标流写入数据
-	/// </summary>
-	/// <param name="buff"></param>
-	/// <param name="offset"></param>
-	/// <param name="count"></param>
-	/// <param name="dstStream"></param>
-	/// <returns></returns>
-	public static async Task ChunkWriteContentToAsync(this byte[] buff, int offset, int count, Stream dstStream)
+	private async Task ChunkWriteContentToAsync(int offset, int count)
 	{
 		string length = $"{count:x}\r\n";
-		await dstStream.WriteAsync(Encoding.ASCII.GetBytes(length));
-		await dstStream.WriteAsync(buff, offset, count);
-		await dstStream.WriteAsync(CRLF);
-		await dstStream.FlushAsync();
-		await Task.Delay(100);
+		await _dstStream.WriteAsync(Encoding.ASCII.GetBytes(length));
+		await _dstStream.WriteAsync(_readBuffer, offset, count);
+		await _dstStream.WriteAsync(CRLF);
 	}
 
-	public static async Task ChunkWriteTrailerAsync(this Stream dstStream)
+	public async Task WriteTrailerAsync()
 	{
-		await dstStream.WriteAsync(Trailer);
+		await _dstStream.WriteAsync(Trailer);
 	}
 
 	public static byte CR { get; } = 13;
