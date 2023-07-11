@@ -12,6 +12,7 @@ public static class ChunkEncoder
 	public static async Task ChunkWriteContentToAsync(this Stream sourceStream, Stream dstStream)
 	{
 		byte[] readBuff = new byte[1500];
+		int count = 0;
 		while (true)
 		{
 			int readCount = await sourceStream.ReadAsync(readBuff);
@@ -23,6 +24,8 @@ public static class ChunkEncoder
 			{
 				await ChunkWriteContentToAsync(readBuff, 0, readCount, dstStream);
 			}
+
+			Console.WriteLine($"第{count++}次分块");
 		}
 	}
 
@@ -40,6 +43,7 @@ public static class ChunkEncoder
 		await dstStream.WriteAsync(Encoding.ASCII.GetBytes(length));
 		await dstStream.WriteAsync(buff, offset, count);
 		await dstStream.WriteAsync(CRLF);
+		await dstStream.FlushAsync();
 		await Task.Delay(100);
 	}
 
