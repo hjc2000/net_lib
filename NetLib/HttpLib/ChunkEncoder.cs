@@ -14,10 +14,10 @@ public class ChunkEncoder
 	private Stream _dstStream;
 	private byte[] _readBuffer;
 
-	public async Task WriteToDstStreamAsync()
+	public async Task WriteToDstStreamAsync(CancellationToken token)
 	{
 		int count = 0;
-		while (true)
+		while (!token.IsCancellationRequested)
 		{
 			int readCount = await _srcStream.ReadAsync(_readBuffer);
 			if (readCount == 0)
